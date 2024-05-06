@@ -1,52 +1,55 @@
-import {useState, useEffect} from 'react'
-import Loader from 'react-loader-spinner'
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+import { useState, useEffect } from "react";
+import { Rings } from "react-loader-spinner";
 
-import Header from '../Header'
-import DishItem from '../DishItem'
+import Header from "../Header";
+import DishItem from "../DishItem";
 
-import './index.css'
+import "./index.css";
 
 const Home = () => {
-  const [restaurantName, setRestaurantName] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [response, setResponse] = useState([])
-  const [activeCategoryId, setActiveCategoryId] = useState('')
+  const [restaurantName, setRestaurantName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [response, setResponse] = useState([]);
+  const [activeCategoryId, setActiveCategoryId] = useState("");
 
-  const [cartItems, setCartItems] = useState([])
+  const [cartItems, setCartItems] = useState([]);
 
-  const addItemToCart = dish => {
-    const isAlreadyExists = cartItems.find(item => item.dishId === dish.dishId)
+  const addItemToCart = (dish) => {
+    const isAlreadyExists = cartItems.find(
+      (item) => item.dishId === dish.dishId
+    );
     if (!isAlreadyExists) {
-      const newDish = {...dish, quantity: 1}
-      setCartItems(prev => [...prev, newDish])
+      const newDish = { ...dish, quantity: 1 };
+      setCartItems((prev) => [...prev, newDish]);
     } else {
-      setCartItems(prev =>
-        prev.map(item =>
+      setCartItems((prev) =>
+        prev.map((item) =>
           item.dishId === dish.dishId
-            ? {...item, quantity: item.quantity + 1}
-            : item,
-        ),
-      )
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
     }
-  }
+  };
 
-  const removeItemFromCart = dish => {
-    const isAlreadyExists = cartItems.find(item => item.dishId === dish.dishId)
+  const removeItemFromCart = (dish) => {
+    const isAlreadyExists = cartItems.find(
+      (item) => item.dishId === dish.dishId
+    );
     if (isAlreadyExists) {
-      const updatedCartItems = cartItems.map(item =>
+      const updatedCartItems = cartItems.map((item) =>
         item.dishId === dish.dishId
-          ? {...item, quantity: item.quantity - 1}
-          : item,
-      )
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      );
 
       const filteredCartItems = updatedCartItems.filter(
-        item => item.quantity > 0,
-      )
+        (item) => item.quantity > 0
+      );
 
-      setCartItems(filteredCartItems)
+      setCartItems(filteredCartItems);
     }
-  }
+  };
 
   // const removeItemFromCart = dish => {
   //   const isAlreadyExists = cartItems.find(item => item.dishId === dish.dishId)
@@ -64,12 +67,12 @@ const Home = () => {
   //   }
   // }
 
-  const getUpdatesData = tableMenuList =>
-    tableMenuList.map(eachMenu => ({
+  const getUpdatesData = (tableMenuList) =>
+    tableMenuList.map((eachMenu) => ({
       menuCategory: eachMenu.menu_category,
       menuCategoryId: eachMenu.menu_category_id,
       menuCategoryImage: eachMenu.menu_category_image,
-      categoryDishes: eachMenu.category_dishes.map(eachDish => ({
+      categoryDishes: eachMenu.category_dishes.map((eachDish) => ({
         dishId: eachDish.dish_id,
         dishName: eachDish.dish_name,
         dishPrice: eachDish.dish_price,
@@ -81,35 +84,36 @@ const Home = () => {
         dishType: eachDish.dish_Type,
         addonCat: eachDish.addonCat,
       })),
-    }))
+    }));
 
   useEffect(() => {
     const fetchRestaurantApi = async () => {
-      const api = 'https://run.mocky.io/v3/77a7e71b-804a-4fbd-822c-3e365d3482cc'
-      const apiResponse = await fetch(api)
-      const data = await apiResponse.json()
-      const updatedData = getUpdatesData(data[0].table_menu_list)
-      setResponse(updatedData)
-      setActiveCategoryId(updatedData[0].menuCategoryId)
-      setIsLoading(false)
-      setRestaurantName(data[0].restaurant_name)
-    }
-    fetchRestaurantApi()
-  }, [])
+      const api =
+        "https://run.mocky.io/v3/77a7e71b-804a-4fbd-822c-3e365d3482cc";
+      const apiResponse = await fetch(api);
+      const data = await apiResponse.json();
+      const updatedData = getUpdatesData(data[0].table_menu_list);
+      setResponse(updatedData);
+      setActiveCategoryId(updatedData[0].menuCategoryId);
+      setIsLoading(false);
+      setRestaurantName(data[0].restaurant_name);
+    };
+    fetchRestaurantApi();
+  }, []);
 
-  const onUpdateActiveCategoryId = menuCategoryId =>
-    setActiveCategoryId(menuCategoryId)
+  const onUpdateActiveCategoryId = (menuCategoryId) =>
+    setActiveCategoryId(menuCategoryId);
 
   const renderTabMenuList = () =>
-    response.map(eachCategory => {
+    response.map((eachCategory) => {
       const onClickHandler = () =>
-        onUpdateActiveCategoryId(eachCategory.menuCategoryId)
+        onUpdateActiveCategoryId(eachCategory.menuCategoryId);
       return (
         <li
           className={`each-tab-item ${
             eachCategory.menuCategoryId === activeCategoryId
-              ? 'active-tab-item'
-              : ''
+              ? "active-tab-item"
+              : ""
           }`}
           key={eachCategory.menuCategoryId}
           onClick={onClickHandler}
@@ -118,15 +122,15 @@ const Home = () => {
             {eachCategory.menuCategory}
           </button>
         </li>
-      )
-    })
+      );
+    });
   const renderDishes = () => {
-    const {categoryDishes} = response.find(
-      eachCategory => eachCategory.menuCategoryId === activeCategoryId,
-    )
+    const { categoryDishes } = response.find(
+      (eachCategory) => eachCategory.menuCategoryId === activeCategoryId
+    );
     return (
       <ul className="dishes-list-container">
-        {categoryDishes.map(eachDish => (
+        {categoryDishes.map((eachDish) => (
           <DishItem
             key={eachDish.dishId}
             dishDetails={eachDish}
@@ -136,14 +140,14 @@ const Home = () => {
           />
         ))}
       </ul>
-    )
-  }
+    );
+  };
 
   const renderSpinner = () => (
     <div className="spinner-container">
-      <Loader type="Rings" width="50" height="50" color="#000000" />
+      <Rings width="50" height="50" color="#000000" />
     </div>
-  )
+  );
 
   return isLoading ? (
     renderSpinner()
@@ -153,7 +157,7 @@ const Home = () => {
       <ul className="tab-container">{renderTabMenuList()}</ul>
       {renderDishes()}
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

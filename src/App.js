@@ -1,7 +1,12 @@
-import Home from './Components/Home'
+import Home from './Components/Home';
+import './App.css';
 
-import './App.css'
+function App() {
+  return (
+    <div className="App">
+      <Home />
+    </div>
+  );
+}
 
-const App = () => <Home />
-
-export default App
+export default App;
