@@ -45,25 +45,29 @@ const DishItem = props => {
 
   return (
     <li className="dish-item-container">
-      <div className={`veg-border ${dishType === 1 ? 'non-veg-border' : ''}`}>
-        <div className={`veg-round ${dishType === 1 ? 'non-veg-round' : ''}`} />
-      </div>
-      <div className="dish-details-container">
-        <h1 className="dish-name">{dishName}</h1>
-        <p className="dish-currency-price">
-          {dishCurrency} {dishPrice}
-        </p>
-        <p className="dish-description">{dishDescription}</p>
-        {dishAvailability && renderControllerButton()}
-        {!dishAvailability && (
-          <p className="not-availability-text">Not available</p>
-        )}
-        {addonCat.length !== 0 && (
-          <p className="addon-availability-test">Customizations available</p>
-        )}
-      </div>
-      <p className="dish-calories">{dishCalories} calories</p>
-      <img className="dish-image" alt={dishName} src={dishImage} />
+      <>
+        <div className={`veg-border ${dishType === 1 ? 'non-veg-border' : ''}`}>
+          <div className={`veg-round ${dishType === 1 ? 'non-veg-round' : ''}`} />
+        </div>
+        <div className="dish-details-container">
+          <h1 className="dish-name">{dishName}</h1>
+          <p className="dish-currency-price">
+            {dishCurrency} {dishPrice}
+          </p>
+          <p className="dish-description">{dishDescription}</p>
+          {dishAvailability && renderControllerButton()}
+          {!dishAvailability && (
+            <p className="not-availability-text">Not available</p>
+          )}
+          {addonCat.length !== 0 && (
+            <p className="add-on-availability-text">Customizations available</p>
+          )}
+        </div>
+      </>
+      <>
+        <p className="dish-calories">{dishCalories} calories</p>
+        <img className="dish-image" alt={dishName} src={dishImage} />
+      </>
     </li>
   )
 }
